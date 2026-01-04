@@ -1,0 +1,253 @@
+# JustWravel Backend API
+
+A robust RESTful API built with Node.js and Express for managing travel bookings, customers, trips, and travellers. This backend powers the JustWravel platform, handling everything from customer registration to trip bookings.
+
+## Table of Contents
+
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [Environment Variables](#environment-variables)
+- [API Endpoints](#api-endpoints)
+- [Project Structure](#project-structure)
+- [Scripts](#scripts)
+- [API Documentation](#api-documentation)
+
+## Features
+
+- **Customer Management**: Create, read, update, and manage customer information
+- **Trip Management**: Handle trip listings and details
+- **Traveller Management**: Manage traveller profiles and information
+- **Booking System**: Complete booking flow with unique reference generation
+- **Data Validation**: Request validation using Joi schemas
+- **Error Handling**: Centralized error handling middleware
+- **CORS Enabled**: Configured for frontend integration
+- **MongoDB Integration**: Mongoose ODM for database operations
+
+## Tech Stack
+
+- **Runtime**: Node.js
+- **Framework**: Express.js v5.2.1
+- **Database**: MongoDB with Mongoose v9.1.1
+- **Validation**: Joi v18.0.2
+- **Environment Config**: dotenv
+- **CORS**: cors middleware
+- **Dev Tools**: nodemon for hot reload
+
+## Getting Started
+
+## Environment Variables
+
+Create a `.env` file in the backend directory with the following variables:
+
+```env
+# Server Configuration
+PORT=8080
+HOST=0.0.0.0
+NODE_ENV=development
+
+# Database
+DB_URI=mongodb://localhost:27017/justwravel
+# OR for MongoDB Atlas:
+# DB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/justwravel
+
+# Frontend URL (for CORS)
+FRONTEND_URL=http://localhost:5173
+```
+
+## API Endpoints
+
+All endpoints are prefixed with `/v1`
+
+### Customer Endpoints
+
+- `POST /v1/customers` - Create a new customer
+- `GET /v1/customers` - Get all customers
+- `GET /v1/customers/:id` - Get customer by ID
+- `PUT /v1/customers/:id` - Update customer
+- `DELETE /v1/customers/:id` - Delete customer
+
+### Trip Endpoints
+
+- `POST /v1/trips` - Create a new trip
+- `GET /v1/trips` - Get all trips
+- `GET /v1/trips/:id` - Get trip by ID
+- `PUT /v1/trips/:id` - Update trip
+- `DELETE /v1/trips/:id` - Delete trip
+
+### Traveller Endpoints
+
+- `POST /v1/travellers` - Create a new traveller
+- `GET /v1/travellers` - Get all travellers
+- `GET /v1/travellers/:id` - Get traveller by ID
+- `PUT /v1/travellers/:id` - Update traveller
+- `DELETE /v1/travellers/:id` - Delete traveller
+
+### Booking Endpoints
+
+- `POST /v1/user-booking` - Create a new booking
+- `GET /v1/user-booking` - Get all bookings
+- `GET /v1/user-booking/:id` - Get booking by ID
+- `PUT /v1/user-booking/:id` - Update booking
+- `DELETE /v1/user-booking/:id` - Delete booking
+
+### Health Check
+
+- `GET /` - Server health check
+
+## 📁 Project Structure
+
+```
+backend/
+├── config/                  # Configuration files
+│   ├── config.js           # App configuration
+│   └── dbConnection.js     # MongoDB connection setup
+├── controllers/            # Request handlers
+│   ├── booking.controller.js
+│   ├── customer.controller.js
+│   ├── traveller.controller.js
+│   └── trip.controller.js
+├── middleware/             # Custom middleware
+│   ├── error.middleware.js      # Error handling
+│   └── validate.middleware.js   # Request validation
+├── models/                 # Mongoose schemas
+│   ├── address.model.js
+│   ├── booking.model.js
+│   ├── customer.model.js
+│   ├── traveller.model.js
+│   └── trip.model.js
+├── routes/                 # API routes
+│   ├── booking.route.js
+│   ├── customer.route.js
+│   ├── index.route.js      # Main router
+│   ├── traveller.route.js
+│   └── trip.route.js
+├── services/               # Business logic
+│   ├── booking.service.js
+│   ├── customer.service.js
+│   ├── traveller.service.js
+│   └── trip.service.js
+├── utils/                  # Utility functions
+│   └── generateBookingReference.js
+├── validations/            # Joi validation schemas
+│   └── booking.validation.js
+├── .env                    # Environment variables (not in git)
+├── package.json
+└── server.js              # Application entry point
+```
+
+## Scripts
+
+```bash
+# Start production server
+npm start
+
+# Start development server with hot reload
+npm run dev
+
+# Run tests (to be implemented)
+npm test
+```
+
+## Architecture
+
+The backend follows a **layered architecture** pattern:
+
+1. **Routes Layer**: Defines API endpoints and maps them to controllers
+2. **Controller Layer**: Handles HTTP requests and responses
+3. **Service Layer**: Contains business logic and database operations
+4. **Model Layer**: Defines data schemas using Mongoose
+5. **Validation Layer**: Validates incoming requests using Joi
+6. **Middleware Layer**: Handles cross-cutting concerns (errors, validation)
+
+### Key Design Patterns
+
+- **MVC Pattern**: Separation of concerns between Models, Views (API responses), and Controllers
+- **Service Layer Pattern**: Business logic isolated from controllers
+- **Middleware Pattern**: Reusable request processing pipeline
+- **Repository Pattern**: Data access abstraction through Mongoose models
+
+## API Documentation
+
+### Example: Creating a Customer
+
+**Request:**
+
+```http
+POST /v1/customers
+Content-Type: application/json
+
+{
+  "fullName": "John Doe",
+  "email": "john@example.com",
+  "phoneNumber": "+91 9876543210"
+}
+```
+
+**Response:**
+
+```json
+{
+  "_id": "60d5f483f0e2a72d8c8b4567",
+  "fullName": "John Doe",
+  "email": "john@example.com",
+  "phoneNumber": "+91 9876543210",
+  "createdAt": "2024-01-04T10:30:00.000Z",
+  "updatedAt": "2024-01-04T10:30:00.000Z"
+}
+```
+
+### Example: Creating a Booking
+
+**Request:**
+
+```http
+POST /v1/user-booking
+Content-Type: application/json
+
+{
+  "customerId": "60d5f483f0e2a72d8c8b4567",
+  "tripId": "60d5f483f0e2a72d8c8b4568",
+  "travellerIds": ["60d5f483f0e2a72d8c8b4569"],
+  "numberOfTravellers": 1,
+  "totalAmount": 15000
+}
+```
+
+**Response:**
+
+```json
+{
+  "_id": "60d5f483f0e2a72d8c8b4570",
+  "bookingReference": "JW-2024-ABC123",
+  "customerId": "60d5f483f0e2a72d8c8b4567",
+  "tripId": "60d5f483f0e2a72d8c8b4568",
+  "travellerIds": ["60d5f483f0e2a72d8c8b4569"],
+  "numberOfTravellers": 1,
+  "totalAmount": 15000,
+  "status": "confirmed",
+  "createdAt": "2024-01-04T10:35:00.000Z"
+}
+```
+
+## Error Handling
+
+The API uses consistent error responses:
+
+```json
+{
+  "error": {
+    "message": "Error message here",
+    "status": 400,
+    "timestamp": "2024-01-04T10:30:00.000Z"
+  }
+}
+```
+
+Common HTTP status codes:
+
+- `200` - Success
+- `201` - Created
+- `400` - Bad Request
+- `404` - Not Found
+- `500` - Internal Server Error

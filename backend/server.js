@@ -22,7 +22,7 @@ app.use((req, res, next) => {
 
 app.use(
   cors({
-    origin: ["http://localhost:5173"], // frontend URL
+    origin: ["http://localhost:5173" || process.env.FRONTEND_URL], // frontend URL
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   })
 );
