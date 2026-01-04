@@ -4,7 +4,7 @@ dotenv.config();
 const config = {
   env: process.env.NODE_ENV || "development",
   port: process.env.PORT || 3000,
-  dbUri: process.env.DB_URI || "mongodb://localhost:27017/justWravel",
+  dbUri: process.env.DB_URI,
   frontendUrl: process.env.FRONTEND_URL,
 };
 
