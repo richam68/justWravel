@@ -29,11 +29,28 @@ function App() {
 
   return (
     <div className="layout">
-      <header className="hero">
+      <header
+        className="bg-gradient-to-br from-slate-900 to-blue-700
+                   text-slate-50 rounded-2xl
+                   px-6 py-6 sm:px-8 sm:py-7
+                   flex flex-col sm:flex-row
+                   items-start sm:items-center
+                   justify-between gap-4
+                   shadow-[0_10px_40px_rgba(0,0,0,0.15)]"
+      >
         <div>
-          <p className="eyebrow">JustWravel </p>
-          <h1>Management dashboard</h1>
-          <p className="lede">
+          <p
+            className="uppercase tracking-wide text-xs font-semibold
+                  text-slate-200"
+          >
+            JustWravel
+          </p>
+
+          <h1 className="mt-1 text-2xl sm:text-3xl font-bold">
+            Management dashboard
+          </h1>
+
+          <p className="mt-2 text-slate-200 max-w-xl text-sm sm:text-base">
             Create and manage bookings, customers, trips, and travellers.
           </p>
         </div>
@@ -51,7 +68,7 @@ function App() {
         ))}
       </nav>
 
-      <main className="grid">
+      <main>
         {activeTab === "customers" && (
           <>
             <section>

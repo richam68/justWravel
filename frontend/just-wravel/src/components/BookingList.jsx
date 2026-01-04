@@ -1,24 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { getBookings, getBookingByReference } from "../api/bookingApi";
 
-const statusOptions = [
-  "pending",
-  "confirmed",
-  "cancelled",
-  "completed",
-  "on-hold",
-];
-const bookingTypes = ["package", "hotel", "flight", "bus", "custom"];
-
 const BookingList = ({ refreshSignal }) => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [filters, setFilters] = useState({
-    bookingType: "",
-    bookingStatus: "",
-  });
-  const [reference, setReference] = useState("");
 
   const fetchBookings = async (query = {}) => {
     setLoading(true);
@@ -34,141 +20,107 @@ const BookingList = ({ refreshSignal }) => {
   };
 
   useEffect(() => {
-    fetchBookings({
-      bookingType: filters.bookingType || undefined,
-      bookingStatus: filters.bookingStatus || undefined,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters.bookingType, filters.bookingStatus, refreshSignal]);
-
-  const handleReferenceSearch = async () => {
-    if (!reference.trim()) return fetchBookings();
-    setLoading(true);
-    setError(null);
-    try {
-      const booking = await getBookingByReference(reference.trim());
-      setBookings(booking ? [booking] : []);
-    } catch (err) {
-      setError(err.message);
-      setBookings([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+    fetchBookings();
+  }, [refreshSignal]);
 
   const rows = useMemo(() => bookings || [], [bookings]);
 
   return (
-    <div className="card">
-      <div className="card-header">
+    <div className="bg-white border border-slate-200 rounded-[14px] p-3 sm:p-5 shadow-[0_6px_20px_rgba(15,23,42,0.04)] mt-6">
+      {/* Header */}
+      <div className="flex items-center justify-between gap-3 mb-4">
         <div>
-          <p className="eyebrow">Bookings</p>
-          <h2>Booking list</h2>
+          <p className="uppercase tracking-wide text-xs text-slate-600">
+            Bookings
+          </p>
+          <h2 className="text-base sm:text-lg font-semibold text-slate-900">
+            Booking list
+          </h2>
         </div>
       </div>
 
-      <div className="filters">
-        <label>
-          <span>Booking Type</span>
-          <select
-            value={filters.bookingType}
-            onChange={(e) =>
-              setFilters((prev) => ({ ...prev, bookingType: e.target.value }))
-            }
-          >
-            <option value="">All</option>
-            {bookingTypes.map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-        </label>
+      {/* States */}
+      {loading && (
+        <p className="text-slate-600 font-medium">Loading bookings...</p>
+      )}
 
-        <label>
-          <span>Status</span>
-          <select
-            value={filters.bookingStatus}
-            onChange={(e) =>
-              setFilters((prev) => ({ ...prev, bookingStatus: e.target.value }))
-            }
-          >
-            <option value="">All</option>
-            {statusOptions.map((status) => (
-              <option key={status} value={status}>
-                {status}
-              </option>
-            ))}
-          </select>
-        </label>
+      {error && <p className="text-red-700 font-semibold">{error}</p>}
 
-        <label className="reference-search">
-          <span>Booking Reference</span>
-          <div className="inline-input">
-            <input
-              type="text"
-              value={reference}
-              onChange={(e) => setReference(e.target.value)}
-              placeholder="e.g. JW-ABC123"
-            />
-            <button type="button" onClick={handleReferenceSearch}>
-              Search
-            </button>
-          </div>
-        </label>
+      {!loading && !rows.length && (
+        <p className="text-slate-600">No bookings found.</p>
+      )}
 
-        <button
-          type="button"
-          className="ghost"
-          onClick={() => {
-            setFilters({ bookingType: "", bookingStatus: "" });
-            setReference("");
-            fetchBookings();
-          }}
-        >
-          Reset
-        </button>
-      </div>
-
-      {loading && <p>Loading bookings...</p>}
-      {error && <p className="error">{error}</p>}
-
-      {!loading && !rows.length && <p>No bookings found.</p>}
-
+      {/* Table */}
       {!loading && rows.length > 0 && (
-        <div className="table-wrapper">
-          <table>
-            <thead>
+        <div className="overflow-x-auto border border-slate-200 rounded-xl -mx-3 sm:mx-0">
+          <table className="w-full min-w-[900px] border-collapse text-xs sm:text-sm">
+            <thead className="bg-slate-50">
               <tr>
-                <th>Reference</th>
-                <th>Type</th>
-                <th>Status</th>
-                <th>Customer</th>
-                <th>Total</th>
-                <th>Departure</th>
-                <th>Created</th>
+                {[
+                  "Reference",
+                  "Type",
+                  "Status",
+                  "Customer",
+                  "Total",
+                  "Departure",
+                  "Created",
+                ].map((head) => (
+                  <th
+                    key={head}
+                    className="text-left px-3 py-3 font-bold text-slate-900
+                           border-b border-slate-200"
+                  >
+                    {head}
+                  </th>
+                ))}
               </tr>
             </thead>
+
             <tbody>
               {rows.map((row) => (
-                <tr key={row._id || row.bookingReference}>
-                  <td>{row.bookingReference}</td>
-                  <td>{row.bookingType}</td>
-                  <td>
+                <tr
+                  key={row._id || row.bookingReference}
+                  className="border-b border-slate-200 last:border-b-0
+                         hover:bg-slate-50 transition"
+                >
+                  <td className="px-3 py-3 font-medium text-slate-900">
+                    {row.bookingReference}
+                  </td>
+
+                  <td className="px-3 py-3 text-slate-900">
+                    {row.bookingType}
+                  </td>
+
+                  <td className="px-3 py-3">
                     <span
-                      className={`tag tag-${row.bookingStatus || "pending"}`}
+                      className={`inline-flex px-2 py-0.5 rounded-full text-xs font-bold border
+                    ${
+                      row.bookingStatus === "confirmed"
+                        ? "bg-green-100 text-green-800 border-green-200"
+                        : row.bookingStatus === "cancelled"
+                        ? "bg-red-100 text-red-700 border-red-200"
+                        : "bg-yellow-100 text-yellow-800 border-yellow-200"
+                    }`}
                     >
                       {row.bookingStatus || "pending"}
                     </span>
                   </td>
-                  <td>{row.customerId?.fullName || row.customerId || "-"}</td>
-                  <td>{row.totalAmount ?? "-"}</td>
-                  <td>
+
+                  <td className="px-3 py-3 text-slate-900">
+                    {row.customerId?.fullName || row.customerId || "-"}
+                  </td>
+
+                  <td className="px-3 py-3 text-slate-900 font-semibold">
+                    {row.totalAmount ?? "-"}
+                  </td>
+
+                  <td className="px-3 py-3 text-slate-900">
                     {row.departureDate
                       ? new Date(row.departureDate).toLocaleDateString()
                       : "-"}
                   </td>
-                  <td>
+
+                  <td className="px-3 py-3 text-slate-900">
                     {row.createdAt
                       ? new Date(row.createdAt).toLocaleString()
                       : "-"}

@@ -86,32 +86,44 @@ const TripForm = ({ onCreated }) => {
   };
 
   return (
-    <div className="card">
-      <div className="card-header">
+    <div className="bg-white border border-slate-200 rounded-[14px] p-3 sm:p-5 shadow-[0_6px_20px_rgba(15,23,42,0.04)] mt-6">
+      {/* Header */}
+      <div className="flex items-center justify-between gap-3 mb-4">
         <div>
-          <p className="eyebrow">New Trip</p>
-          <h2>Create trip</h2>
+          <p className="uppercase tracking-wide text-xs text-slate-600 m-0">
+            New Trip
+          </p>
+          <h2 className="text-base sm:text-lg font-semibold text-slate-900">
+            Create trip
+          </h2>
         </div>
       </div>
 
-      <form className="form-grid" onSubmit={handleSubmit}>
-        <label className="field">
-          <span>Trip Name</span>
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="grid gap-3">
+        {/* Trip Name */}
+        <label className="flex flex-col gap-1.5">
+          <span className="font-semibold text-slate-900">Trip Name</span>
           <input
             type="text"
             value={tripName}
             onChange={(e) => setTripName(e.target.value)}
             placeholder="Manali Adventure"
             required
+            className="px-3 py-2.5 border border-slate-300 rounded-lg
+                   focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-1"
           />
         </label>
 
-        <label className="field">
-          <span>Trip Type</span>
+        {/* Trip Type */}
+        <label className="flex flex-col gap-1.5">
+          <span className="font-semibold text-slate-900">Trip Type</span>
           <select
             value={tripType}
             onChange={(e) => setTripType(e.target.value)}
             required
+            className="px-3 py-2.5 border border-slate-300 rounded-lg bg-white
+                   focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-1"
           >
             {tripTypes.map((type) => (
               <option key={type} value={type}>
@@ -121,12 +133,15 @@ const TripForm = ({ onCreated }) => {
           </select>
         </label>
 
-        <label className="field">
-          <span>Status</span>
+        {/* Status */}
+        <label className="flex flex-col gap-1.5">
+          <span className="font-semibold text-slate-900">Status</span>
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
             required
+            className="px-3 py-2.5 border border-slate-300 rounded-lg bg-white
+                   focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-1"
           >
             {tripStatuses.map((s) => (
               <option key={s} value={s}>
@@ -136,65 +151,83 @@ const TripForm = ({ onCreated }) => {
           </select>
         </label>
 
-        <div className="field custom-grid">
-          <span className="field-title">Destination</span>
-          <label>
-            <span>City</span>
-            <input
-              type="text"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              placeholder="Manali"
-            />
-          </label>
-          <label>
-            <span>State</span>
-            <input
-              type="text"
-              value={state}
-              onChange={(e) => setState(e.target.value)}
-              placeholder="Himachal Pradesh"
-            />
-          </label>
-          <label>
-            <span>Country</span>
-            <input
-              type="text"
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
-              placeholder="India"
-            />
-          </label>
+        {/* Destination */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-3 border border-dashed border-slate-300 rounded-xl">
+          <span className="md:col-span-2 font-bold text-slate-900">
+            Destination
+          </span>
+
+          {[
+            {
+              label: "City",
+              value: city,
+              setter: setCity,
+              placeholder: "Manali",
+            },
+            {
+              label: "State",
+              value: state,
+              setter: setState,
+              placeholder: "Himachal Pradesh",
+            },
+            {
+              label: "Country",
+              value: country,
+              setter: setCountry,
+              placeholder: "India",
+            },
+          ].map(({ label, value, setter, placeholder }) => (
+            <label key={label} className="flex flex-col gap-1.5">
+              <span className="font-semibold text-slate-900">{label}</span>
+              <input
+                type="text"
+                value={value}
+                onChange={(e) => setter(e.target.value)}
+                placeholder={placeholder}
+                className="px-3 py-2.5 border border-slate-300 rounded-lg
+                       focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-1"
+              />
+            </label>
+          ))}
         </div>
 
-        <label className="field">
-          <span>Days</span>
+        {/* Days */}
+        <label className="flex flex-col gap-1.5">
+          <span className="font-semibold text-slate-900">Days</span>
           <input
             type="number"
             min="1"
             value={days}
             onChange={(e) => setDays(e.target.value)}
             required
+            className="px-3 py-2.5 border border-slate-300 rounded-lg
+                   focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-1"
           />
         </label>
 
-        <label className="field">
-          <span>Nights</span>
+        {/* Nights */}
+        <label className="flex flex-col gap-1.5">
+          <span className="font-semibold text-slate-900">Nights</span>
           <input
             type="number"
             min="0"
             value={nights}
             onChange={(e) => setNights(e.target.value)}
             required
+            className="px-3 py-2.5 border border-slate-300 rounded-lg
+                   focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-1"
           />
         </label>
 
-        <label className="field">
-          <span>Transport Mode</span>
+        {/* Transport */}
+        <label className="flex flex-col gap-1.5">
+          <span className="font-semibold text-slate-900">Transport Mode</span>
           <select
             value={transportMode}
             onChange={(e) => setTransportMode(e.target.value)}
             required
+            className="px-3 py-2.5 border border-slate-300 rounded-lg bg-white
+                   focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-1"
           >
             {transportModes.map((mode) => (
               <option key={mode} value={mode}>
@@ -204,12 +237,17 @@ const TripForm = ({ onCreated }) => {
           </select>
         </label>
 
-        <label className="field">
-          <span>Accommodation Type</span>
+        {/* Accommodation */}
+        <label className="flex flex-col gap-1.5">
+          <span className="font-semibold text-slate-900">
+            Accommodation Type
+          </span>
           <select
             value={accommodationType}
             onChange={(e) => setAccommodationType(e.target.value)}
             required
+            className="px-3 py-2.5 border border-slate-300 rounded-lg bg-white
+                   focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-1"
           >
             {accommodationTypes.map((type) => (
               <option key={type} value={type}>
@@ -219,8 +257,9 @@ const TripForm = ({ onCreated }) => {
           </select>
         </label>
 
-        <label className="field">
-          <span>Base Price</span>
+        {/* Pricing */}
+        <label className="flex flex-col gap-1.5">
+          <span className="font-semibold text-slate-900">Base Price</span>
           <input
             type="number"
             min="0"
@@ -228,11 +267,13 @@ const TripForm = ({ onCreated }) => {
             onChange={(e) => setBasePrice(e.target.value)}
             placeholder="e.g. 10000"
             required
+            className="px-3 py-2.5 border border-slate-300 rounded-lg
+                   focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-1"
           />
         </label>
 
-        <label className="field">
-          <span>Final Price</span>
+        <label className="flex flex-col gap-1.5">
+          <span className="font-semibold text-slate-900">Final Price</span>
           <input
             type="number"
             min="0"
@@ -240,18 +281,36 @@ const TripForm = ({ onCreated }) => {
             onChange={(e) => setFinalPrice(e.target.value)}
             placeholder="e.g. 12000"
             required
+            className="px-3 py-2.5 border border-slate-300 rounded-lg
+                   focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-1"
           />
         </label>
 
-        <div className="form-actions">
-          <button type="submit" disabled={formStatus.loading}>
+        {/* Actions */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mt-2">
+          <button
+            type="submit"
+            disabled={formStatus.loading}
+            className="bg-blue-700 text-white font-bold px-4 py-2.5 rounded-lg
+                   transition-all duration-150
+                   hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(37,99,235,0.25)]
+                   disabled:opacity-60 disabled:cursor-not-allowed
+                   disabled:shadow-none disabled:transform-none
+                   w-full sm:w-auto"
+          >
             {formStatus.loading ? "Creating..." : "Create Trip"}
           </button>
+
           {formStatus.message && (
-            <span className="success">{formStatus.message}</span>
+            <span className="text-green-700 font-semibold text-sm sm:text-base">
+              {formStatus.message}
+            </span>
           )}
+
           {formStatus.error && (
-            <span className="error">{formStatus.error}</span>
+            <span className="text-red-700 font-semibold text-sm sm:text-base">
+              {formStatus.error}
+            </span>
           )}
         </div>
       </form>

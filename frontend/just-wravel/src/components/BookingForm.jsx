@@ -125,15 +125,25 @@ const BookingForm = ({ onCreated }) => {
   };
 
   return (
-    // 🔒 UI UNCHANGED
-    <div className="card">
-      <form className="form-grid" onSubmit={handleSubmit}>
-        <label className="field">
-          <span>Booking Type</span>
+    <div className="bg-white border border-slate-200 rounded-[14px] p-3 sm:p-5 shadow-[0_6px_20px_rgba(15,23,42,0.04)] mt-6">
+      <div className="mb-4">
+        <p className="uppercase tracking-wide text-xs text-slate-600 m-0">
+          New Booking
+        </p>
+        <h2 className="text-base sm:text-lg font-semibold text-slate-900">
+          Create booking
+        </h2>
+      </div>
+      <form onSubmit={handleSubmit} className="grid gap-3">
+        {/* Booking Type */}
+        <label className="flex flex-col gap-1.5">
+          <span className="font-semibold text-slate-900">Booking Type</span>
           <select
             value={bookingType}
             onChange={(e) => setBookingType(e.target.value)}
             required
+            className="px-3 py-2.5 border border-slate-300 rounded-lg bg-white
+                   focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-1"
           >
             {bookingTypes.map((type) => (
               <option key={type} value={type}>
@@ -143,65 +153,89 @@ const BookingForm = ({ onCreated }) => {
           </select>
         </label>
 
-        <label className="field">
-          {/* <span>Customer ID {reduxCustomerId && "✓ Auto-filled"}</span> */}
+        {/* Customer ID */}
+        <label className="flex flex-col gap-1.5">
+          <span className="font-semibold text-slate-900">
+            Customer ID {reduxCustomerId && "✓ Auto-filled"}
+          </span>
           <input
             type="text"
             value={customerId}
             onChange={(e) => setCustomerId(e.target.value)}
             placeholder="ObjectId of customer"
             required
-            className={reduxCustomerId ? "auto-filled" : ""}
+            className={`px-3 py-2.5 border rounded-lg
+          ${
+            reduxCustomerId
+              ? "bg-green-100 border-green-300 focus:ring-green-500"
+              : "border-slate-300 focus:ring-blue-700"
+          }
+          focus:outline-none focus:ring-2 focus:ring-offset-1`}
           />
         </label>
 
+        {/* Trip ID (not custom) */}
         {bookingType !== "custom" && (
-          <label className="field">
-            {/* <span>Trip ID {reduxTripId && "✓ Auto-filled"}</span> */}
+          <label className="flex flex-col gap-1.5">
+            <span className="font-semibold text-slate-900">
+              Trip ID {reduxTripId && "✓ Auto-filled"}
+            </span>
             <input
               type="text"
               value={tripId}
               onChange={(e) => setTripId(e.target.value)}
               placeholder="ObjectId of trip"
               required
-              className={reduxTripId ? "auto-filled" : ""}
+              className={`px-3 py-2.5 border rounded-lg
+            ${
+              reduxTripId
+                ? "bg-green-100 border-green-300 focus:ring-green-500"
+                : "border-slate-300 focus:ring-blue-700"
+            }
+            focus:outline-none focus:ring-2 focus:ring-offset-1`}
             />
           </label>
         )}
 
-        <label className="field">
-          <span>
-            Traveller IDs{" "}
-            {reduxTravellerIds &&
-              reduxTravellerIds.length > 0 &&
-              "✓ Auto-filled"}
+        {/* Traveller IDs */}
+        <label className="flex flex-col gap-1.5">
+          <span className="font-semibold text-slate-900">
+            Traveller IDs {reduxTravellerIds?.length > 0 && "✓ Auto-filled"}
           </span>
           <input
             value={travellersRaw}
             onChange={(e) => setTravellersRaw(e.target.value)}
             rows={3}
             required
-            className={
-              reduxTravellerIds && reduxTravellerIds.length > 0
-                ? "auto-filled"
-                : ""
-            }
+            className={`px-3 py-2.5 border rounded-lg resize-vertical
+          ${
+            reduxTravellerIds?.length > 0
+              ? "bg-green-100 border-green-300 focus:ring-green-500"
+              : "border-slate-300 focus:ring-blue-700"
+          }
+          focus:outline-none focus:ring-2 focus:ring-offset-1`}
           />
-          <small>{travellersArray.length || 0} travellers</small>
+          <small className="text-slate-500">
+            {travellersArray.length || 0} travellers
+          </small>
         </label>
 
-        <label className="field">
-          <span>Departure Date</span>
+        {/* Departure Date */}
+        <label className="flex flex-col gap-1.5">
+          <span className="font-semibold text-slate-900">Departure Date</span>
           <input
             type="date"
             value={departureDate}
             onChange={(e) => setDepartureDate(e.target.value)}
             required
+            className="px-3 py-2.5 border border-slate-300 rounded-lg bg-white
+                   focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-1"
           />
         </label>
 
-        <label className="field">
-          <span>Total Amount</span>
+        {/* Total Amount */}
+        <label className="flex flex-col gap-1.5">
+          <span className="font-semibold text-slate-900">Total Amount</span>
           <input
             type="number"
             min="0"
@@ -209,79 +243,107 @@ const BookingForm = ({ onCreated }) => {
             onChange={(e) => setTotalAmount(e.target.value)}
             placeholder="e.g. 12000"
             required
+            className="px-3 py-2.5 border border-slate-300 rounded-lg
+                   focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-1"
           />
         </label>
 
+        {/* Custom Trip Details */}
         {bookingType === "custom" && (
-          <div className="field custom-grid">
-            <span className="field-title">Custom Trip Details</span>
-            <label>
-              <span>Destination</span>
-              <input
-                type="text"
-                value={customDetails.destination}
-                onChange={(e) =>
-                  handleCustomChange("destination", e.target.value)
-                }
-                required
-              />
-            </label>
-            <label>
-              <span>Days</span>
-              <input
-                type="number"
-                min="1"
-                value={customDetails.numberOfDays}
-                onChange={(e) =>
-                  handleCustomChange("numberOfDays", e.target.value)
-                }
-                required
-              />
-            </label>
-            <label>
-              <span>Nights (optional)</span>
-              <input
-                type="number"
-                min="0"
-                value={customDetails.numberOfNights}
-                onChange={(e) =>
-                  handleCustomChange("numberOfNights", e.target.value)
-                }
-              />
-            </label>
-            <label>
-              <span>Budget Min</span>
-              <input
-                type="number"
-                min="0"
-                value={customDetails.budgetMin}
-                onChange={(e) =>
-                  handleCustomChange("budgetMin", e.target.value)
-                }
-                required
-              />
-            </label>
-            <label>
-              <span>Budget Max</span>
-              <input
-                type="number"
-                min="0"
-                value={customDetails.budgetMax}
-                onChange={(e) =>
-                  handleCustomChange("budgetMax", e.target.value)
-                }
-                required
-              />
-            </label>
+          <div
+            className="grid grid-cols-1 md:grid-cols-2 gap-3 p-3
+                      border border-dashed border-slate-300 rounded-xl"
+          >
+            <span className="md:col-span-2 font-bold text-slate-900">
+              Custom Trip Details
+            </span>
+
+            {[
+              {
+                label: "Destination",
+                value: customDetails.destination,
+                key: "destination",
+                type: "text",
+                required: true,
+              },
+              {
+                label: "Days",
+                value: customDetails.numberOfDays,
+                key: "numberOfDays",
+                type: "number",
+                min: 1,
+                required: true,
+              },
+              {
+                label: "Nights (optional)",
+                value: customDetails.numberOfNights,
+                key: "numberOfNights",
+                type: "number",
+                min: 0,
+              },
+              {
+                label: "Budget Min",
+                value: customDetails.budgetMin,
+                key: "budgetMin",
+                type: "number",
+                min: 0,
+                required: true,
+              },
+              {
+                label: "Budget Max",
+                value: customDetails.budgetMax,
+                key: "budgetMax",
+                type: "number",
+                min: 0,
+                required: true,
+              },
+            ].map((field) => (
+              <label key={field.key} className="flex flex-col gap-1.5">
+                <span className="font-semibold text-slate-900">
+                  {field.label}
+                </span>
+                <input
+                  type={field.type}
+                  min={field.min}
+                  value={field.value}
+                  onChange={(e) =>
+                    handleCustomChange(field.key, e.target.value)
+                  }
+                  required={field.required}
+                  className="px-3 py-2.5 border border-slate-300 rounded-lg
+                         focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-1"
+                />
+              </label>
+            ))}
           </div>
         )}
 
-        <div className="form-actions">
-          <button type="submit" disabled={status.loading}>
+        {/* Actions */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mt-2">
+          <button
+            type="submit"
+            disabled={status.loading}
+            className="bg-blue-700 text-white font-bold px-4 py-2.5 rounded-lg
+                   transition-all duration-150
+                   hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(37,99,235,0.25)]
+                   disabled:opacity-60 disabled:cursor-not-allowed
+                   disabled:shadow-none disabled:transform-none
+                   w-full sm:w-auto"
+          >
             {status.loading ? "Creating..." : "Create Booking"}
           </button>
-          {status.message && <span className="success">{status.message}</span>}
-          {status.error && <span className="error">{status.error}</span>}
+
+          {status.message && (
+            <span className="text-green-700 font-semibold text-sm sm:text-base break-words">
+              {status.message}
+            </span>
+          )}
+
+          {status.error && (
+            <span className="text-red-700 font-semibold text-sm sm:text-base break-words">
+              {status.error}
+            </span>
+          )}
         </div>
       </form>
     </div>

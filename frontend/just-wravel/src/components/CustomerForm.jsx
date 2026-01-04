@@ -47,54 +47,85 @@ const CustomerForm = ({ onCreated }) => {
   };
 
   return (
-    <div className="card">
-      <div className="card-header">
+    <div className="bg-white border border-slate-200 rounded-[14px] p-5 shadow-[0_6px_20px_rgba(15,23,42,0.04)] mt-6">
+      {/* Header */}
+      <div className="flex items-center justify-between gap-3 mb-4">
         <div>
-          <p className="eyebrow">New Customer</p>
-          <h2>Create customer</h2>
+          <p className="uppercase tracking-wide text-xs text-slate-600 m-0">
+            New Customer
+          </p>
+          <h2 className="text-lg font-semibold text-slate-900">
+            Create customer
+          </h2>
         </div>
       </div>
 
-      <form className="form-grid" onSubmit={handleSubmit}>
-        <label className="field">
-          <span>Full Name</span>
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="grid gap-3">
+        {/* Full Name */}
+        <label className="flex flex-col gap-1.5">
+          <span className="font-semibold text-slate-900">Full Name</span>
           <input
             type="text"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             placeholder="John Doe"
             required
+            className="px-3 py-2.5 border border-slate-300 rounded-lg bg-white text-slate-900
+                   focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-1"
           />
         </label>
 
-        <label className="field">
-          <span>Email</span>
+        {/* Email */}
+        <label className="flex flex-col gap-1.5">
+          <span className="font-semibold text-slate-900">Email</span>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="john@example.com"
             required
+            className="px-3 py-2.5 border border-slate-300 rounded-lg bg-white text-slate-900
+                   focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-1"
           />
         </label>
 
-        <label className="field">
-          <span>Phone Number</span>
+        {/* Phone */}
+        <label className="flex flex-col gap-1.5">
+          <span className="font-semibold text-slate-900">Phone Number</span>
           <input
             type="tel"
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
             placeholder="+91 9876543210"
             required
+            className="px-3 py-2.5 border border-slate-300 rounded-lg bg-white text-slate-900
+                   focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-1"
           />
         </label>
 
-        <div className="form-actions">
-          <button type="submit" disabled={status.loading}>
+        {/* Actions */}
+        <div className="flex items-center gap-3 flex-wrap mt-1">
+          <button
+            type="submit"
+            disabled={status.loading}
+            className="bg-blue-700 text-white font-bold px-4 py-2.5 rounded-lg
+                   transition-all duration-150
+                   hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(37,99,235,0.25)]
+                   disabled:opacity-60 disabled:cursor-not-allowed disabled:shadow-none disabled:transform-none"
+          >
             {status.loading ? "Creating..." : "Create Customer"}
           </button>
-          {status.message && <span className="success">{status.message}</span>}
-          {status.error && <span className="error">{status.error}</span>}
+
+          {status.message && (
+            <span className="text-green-700 font-semibold">
+              {status.message}
+            </span>
+          )}
+
+          {status.error && (
+            <span className="text-red-700 font-semibold">{status.error}</span>
+          )}
         </div>
       </form>
     </div>
