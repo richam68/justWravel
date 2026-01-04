@@ -22,11 +22,11 @@ app.use((req, res, next) => {
 
 app.use(
   cors({
-    origin: ["http://localhost:5173" || process.env.FRONTEND_URL], // frontend URL
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    origin: ["http://localhost:5173", "https://just-wravel-s26w.vercel.app"],
+    credentials: true,
   })
 );
-
+app.options("*", cors());
 // Middleware to parse JSON requests
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
